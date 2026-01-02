@@ -117,3 +117,7 @@ logs/
 Gemfile.lock
 gradle-wrapper.jar
 *.xcworkspacedata
+
+# react-native-config codegen
+ios/tmp.xcconfig
+.env

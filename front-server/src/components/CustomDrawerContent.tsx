@@ -10,7 +10,6 @@ import { Image, Pressable, SafeAreaView, StyleSheet, Text, View } from 'react-na
 
 function CustomDrawerContent(props: DrawerContentComponentProps) {
   const { auth } = useAuth();
-  console.log('auth', auth);
   return (
     <SafeAreaView style={styles.container}>
       <DrawerContentScrollView
