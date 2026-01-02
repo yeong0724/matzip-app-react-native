@@ -36,4 +36,19 @@ function validateSignup(values: { email: string; password: string; passwordConfi
   return errors;
 }
 
-export { validateEmailAndPassword, validateSignup };
+function validateAddLocation(values: { title: string; description: string }) {
+  const { title } = values;
+
+  const errors = {
+    title: '',
+    description: '',
+  };
+
+  if (title.trim() === '') {
+    errors.title = '제목은 1 ~ 30자 이내로 입력해주세요.';
+  }
+
+  return errors;
+}
+
+export { validateEmailAndPassword, validateSignup, validateAddLocation };
