@@ -12,7 +12,7 @@ function useForm<T>({ initialValue, validate }: UseFormProps<T>) {
 
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const handleChangeForm = (name: keyof T, value: string) => {
+  const handleChangeForm = (name: keyof T, value: string | Date | number) => {
     setForm(prev => ({ ...prev, [name]: value }));
   };
 
@@ -20,9 +20,10 @@ function useForm<T>({ initialValue, validate }: UseFormProps<T>) {
     setTouched(prev => ({ ...prev, [name]: true }));
   };
 
+  // 오직 Text Input에서만 사용
   const getInputFieldProps = (name: keyof T) => {
     return {
-      value: form[name],
+      value: form[name] as string,
       onChangeText: (text: string) => handleChangeForm(name, text),
       onBlur: () => handleBlur(name),
     };
@@ -33,7 +34,7 @@ function useForm<T>({ initialValue, validate }: UseFormProps<T>) {
     setErrors(newErrors);
   }, [validate, form]);
 
-  return { form, touched, errors, getInputFieldProps };
+  return { form, touched, errors, onChange: handleChangeForm, getInputFieldProps };
 }
 
 export default useForm;

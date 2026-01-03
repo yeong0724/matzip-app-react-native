@@ -36,12 +36,21 @@ function validateSignup(values: { email: string; password: string; passwordConfi
   return errors;
 }
 
-function validateAddLocation(values: { title: string; description: string }) {
+function validateAddLocation(values: {
+  title: string;
+  description: string;
+  date: Date;
+  color: string;
+  score: number;
+}) {
   const { title } = values;
 
   const errors = {
     title: '',
     description: '',
+    date: '',
+    color: '',
+    score: '',
   };
 
   if (title.trim() === '') {

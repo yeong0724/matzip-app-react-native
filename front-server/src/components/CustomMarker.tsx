@@ -1,26 +1,39 @@
 import { colors } from '@/constants/colors';
 import { StyleSheet, View } from 'react-native';
-import { LatLng, MapMarkerProps, Marker } from 'react-native-maps';
+import { LatLng, Marker, MyMapMarkerProps } from 'react-native-maps';
 
-interface CustomMarkerProps extends MapMarkerProps {
-  coordinate: LatLng;
+interface CustomMarkerProps extends MyMapMarkerProps {
+  coordinate?: LatLng;
   color: string;
   score?: number;
 }
 
-function CustomMarker({ coordinate, color, score = 5, ...props }: CustomMarkerProps) {
+interface MarkerViewProps {
+  color: string;
+  score: number;
+}
+
+const MarkerView = ({ color, score }: MarkerViewProps) => {
   return (
-    <Marker coordinate={coordinate} {...props}>
-      <View style={styles.container}>
-        <View style={[styles.marker, { backgroundColor: color }]}>
-          <View style={[styles.eye, styles.leftEye]} />
-          <View style={[styles.eye, styles.rightEye]} />
-          {score > 3 && <View style={[styles.mouth, styles.good]} />}
-          {score === 3 && <View style={[styles.soso]} />}
-          {score < 3 && <View style={[styles.mouth, styles.bad]} />}
-        </View>
+    <View style={styles.container}>
+      <View style={[styles.marker, { backgroundColor: color }]}>
+        <View style={[styles.eye, styles.leftEye]} />
+        <View style={[styles.eye, styles.rightEye]} />
+        {score > 3 && <View style={[styles.mouth, styles.good]} />}
+        {score === 3 && <View style={[styles.soso]} />}
+        {score < 3 && <View style={[styles.mouth, styles.bad]} />}
       </View>
+    </View>
+  );
+};
+
+function CustomMarker({ coordinate, color, score = 5, ...props }: CustomMarkerProps) {
+  return coordinate ? (
+    <Marker coordinate={coordinate} {...props}>
+      <MarkerView color={color} score={score} />
     </Marker>
+  ) : (
+    <MarkerView color={color} score={score} />
   );
 }
 
@@ -28,7 +41,7 @@ const styles = StyleSheet.create({
   container: {
     width: 32,
     height: 35,
-    alignContent: 'center',
+    alignItems: 'center',
   },
   marker: {
     transform: [{ rotate: '45deg' }],
