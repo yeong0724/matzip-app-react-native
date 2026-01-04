@@ -1,7 +1,7 @@
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createStaticNavigation } from '@react-navigation/native';
-import CustomDrawerContent from '@/components/CustomDrawerContent';
-import DrawerButton from '@/components/DrawerButton';
+import CustomDrawerContent from '@/components/common/CustomDrawerContent';
+import DrawerButton from '@/components/common/DrawerButton';
 import CalendarScreen from '@/screens/calendar/CalendarScreen';
 import { FeedStack } from '@/navigations/FeedNavigation';
 import { MapStack } from '@/navigations/MapNavigation';

@@ -11,4 +11,9 @@ async function getLocation(id: number): Promise<Location> {
   return data;
 }
 
-export { createLocation, getLocation };
+async function getLocations(page: number = 1): Promise<Location[]> {
+  const { data } = await axiosInstance.get(`/posts?page=${page}`);
+  return data;
+}
+
+export { createLocation, getLocation, getLocations };

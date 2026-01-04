@@ -1,10 +1,10 @@
-import CustomButton from '@/components/CustomButton';
-import FixedBottomCTA from '@/components/FixedBottomCTA';
-import ImageInput from '@/components/ImageInput';
-import InputField from '@/components/InputField';
-import MarkerColorInput from '@/components/MarkerColorInput';
-import PreviewImageList from '@/components/PreviewImageList';
-import ScoreInput from '@/components/ScoreInput';
+import CustomButton from '@/components/common/CustomButton';
+import FixedBottomCTA from '@/components/common/FixedBottomCTA';
+import ImageInput from '@/components/location/ImageInput';
+import InputField from '@/components/common/InputField';
+import MarkerColorInput from '@/components/location/MarkerColorInput';
+import PreviewImageList from '@/components/common/PreviewImageList';
+import ScoreInput from '@/components/location/ScoreInput';
 import { colors } from '@/constants/colors';
 import useMutateLocation from '@/hooks/queries/useMutateLocation';
 import useForm from '@/hooks/useForm';
@@ -20,6 +20,7 @@ import React, { useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import Toast from 'react-native-toast-message';
 
 type Props = StackScreenProps<MapStackParamList, 'AddLocation'>;
 
@@ -61,6 +62,10 @@ function AddLocationScreen({ route }: Props) {
       },
       {
         onSuccess: () => {
+          Toast.show({
+            type: 'success',
+            text1: '장소가 추가되었습니다.',
+          });
           navigation.goBack();
         },
       },
@@ -112,7 +117,11 @@ function AddLocationScreen({ route }: Props) {
         />
         <View style={{ flexDirection: 'row' }}>
           <ImageInput onChange={handleChangeImage} />
-          <PreviewImageList imageUriList={imageUriList} onDelete={deleteImageUri} />
+          <PreviewImageList
+            imageUriList={imageUriList}
+            showDeleteButton
+            onDelete={deleteImageUri}
+          />
         </View>
       </ScrollView>
       <FixedBottomCTA label="저장" onPress={handleSubmit} />

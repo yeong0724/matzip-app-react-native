@@ -7,18 +7,25 @@ import { Image, Platform, Pressable, ScrollView, StyleSheet } from 'react-native
 interface PreviewImageListProps {
   imageUriList: ImageUri[];
   onDelete?: (uri: string) => void;
+  showDeleteButton?: boolean;
 }
 
-function PreviewImageList({ imageUriList, onDelete }: PreviewImageListProps) {
+function PreviewImageList({
+  imageUriList,
+  showDeleteButton = false,
+  onDelete,
+}: PreviewImageListProps) {
   const baseUrl = Platform.OS === 'android' ? baseUrls.android : baseUrls.ios;
   return (
     <ScrollView horizontal contentContainerStyle={styles.container}>
       {imageUriList.map(({ uri }) => (
         <Pressable key={uri} style={styles.imageContainer}>
           <Image source={{ uri: `${baseUrl}/${uri}` }} style={styles.image} resizeMode="cover" />
-          <Pressable style={styles.deleteButton} onPress={() => onDelete?.(uri)}>
-            <Ionicons name="close" size={16} color={colors.WHITE} />
-          </Pressable>
+          {showDeleteButton && (
+            <Pressable style={styles.deleteButton} onPress={() => onDelete?.(uri)}>
+              <Ionicons name="close" size={16} color={colors.WHITE} />
+            </Pressable>
+          )}
         </Pressable>
       ))}
     </ScrollView>

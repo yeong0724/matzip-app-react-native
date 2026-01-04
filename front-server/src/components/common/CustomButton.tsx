@@ -1,13 +1,20 @@
 import { colors } from '@/constants/colors';
-import { Pressable, PressableProps, StyleSheet, Text } from 'react-native';
+import { Pressable, PressableProps, StyleProp, StyleSheet, Text, ViewStyle } from 'react-native';
 
 interface CustomButtonProps extends PressableProps {
-  label: string;
+  label: string | React.ReactNode;
   variant?: 'filled' | 'outlined';
   size?: 'small' | 'large';
+  style?: StyleProp<ViewStyle>;
 }
 
-function CustomButton({ label, variant = 'filled', size = 'large', ...props }: CustomButtonProps) {
+function CustomButton({
+  label,
+  variant = 'filled',
+  size = 'large',
+  style = null,
+  ...props
+}: CustomButtonProps) {
   return (
     <Pressable
       style={({ pressed }) => [
@@ -15,9 +22,10 @@ function CustomButton({ label, variant = 'filled', size = 'large', ...props }: C
         styles[variant],
         styles[size],
         pressed && styles.pressed,
+        style,
       ]}
       {...props}>
-      <Text style={styles[`${variant}Text`]}>{label}</Text>
+      {typeof label === 'string' ? <Text style={styles[`${variant}Text`]}>{label}</Text> : label}
     </Pressable>
   );
 }

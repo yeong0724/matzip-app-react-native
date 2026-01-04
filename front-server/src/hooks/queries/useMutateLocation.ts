@@ -9,6 +9,7 @@ function useMutateLocation(MutationOptions?: UseMutationCustomOptions) {
     mutationFn: createLocation,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [queryKeys.MARKER, queryKeys.GET_MARKERS] });
+      queryClient.invalidateQueries({ queryKey: [queryKeys.LOCATION, queryKeys.GET_LOCATIONS] });
     },
     ...MutationOptions,
   });

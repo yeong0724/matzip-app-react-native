@@ -1,4 +1,4 @@
-import CustomButton from '@/components/CustomButton';
+import CustomButton from '@/components/common/CustomButton';
 import { colors } from '@/constants/colors';
 import { AuthStackParamList } from '@/types/navigation';
 import { useNavigation } from '@react-navigation/native';

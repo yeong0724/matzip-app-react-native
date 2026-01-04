@@ -6,6 +6,7 @@ const queryKeys = {
   GET_MARKERS: 'getMarkers',
   LOCATION: 'location',
   GET_LOCATION: 'getLocation',
+  GET_LOCATIONS: 'getLocations',
 };
 
 const storageKeys = {

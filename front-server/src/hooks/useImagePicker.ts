@@ -33,7 +33,8 @@ function useImagePicker() {
         });
       })
       .catch(error => {
-        if (error.code !== 'E_PICKER_CANCELED') {
+        console.log(error.code);
+        if (error.code !== 'E_PICKER_CANCELLED') {
           Toast.show({
             type: 'error',
             text1: '권한을 허용했는지 확인해주세요.',
