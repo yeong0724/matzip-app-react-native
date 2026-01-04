@@ -1,6 +1,6 @@
 import CustomButton from '@/components/CustomButton';
 import InputField from '@/components/InputField';
-import useAuth from '@/hooks/useAuth';
+import useAuth from '@/hooks/queries/useAuth';
 import useForm from '@/hooks/useForm';
 import { validateSignup } from '@/utils/validation';
 import React, { useRef } from 'react';

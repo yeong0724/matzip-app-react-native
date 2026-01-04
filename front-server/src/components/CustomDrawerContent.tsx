@@ -1,5 +1,5 @@
 import { colors } from '@/constants/colors';
-import useAuth from '@/hooks/useAuth';
+import useAuth from '@/hooks/queries/useAuth';
 import {
   DrawerContentComponentProps,
   DrawerContentScrollView,

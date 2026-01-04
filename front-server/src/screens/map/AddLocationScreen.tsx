@@ -3,19 +3,22 @@ import FixedBottomCTA from '@/components/FixedBottomCTA';
 import ImageInput from '@/components/ImageInput';
 import InputField from '@/components/InputField';
 import MarkerColorInput from '@/components/MarkerColorInput';
+import PreviewImageList from '@/components/PreviewImageList';
 import ScoreInput from '@/components/ScoreInput';
 import { colors } from '@/constants/colors';
+import useMutateLocation from '@/hooks/queries/useMutateLocation';
 import useForm from '@/hooks/useForm';
 import useGetAddress from '@/hooks/useGetAddress';
+import useImagePicker from '@/hooks/useImagePicker';
 import usePermission from '@/hooks/usePermission';
 import { MapStackParamList } from '@/types/navigation';
 import { getDateWithSeparator } from '@/utils/date';
 import { validateAddLocation } from '@/utils/validation';
+import { useNavigation } from '@react-navigation/native';
 import { StackScreenProps } from '@react-navigation/stack';
 import React, { useState } from 'react';
-import { ScrollView, StyleSheet } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 import DatePicker from 'react-native-date-picker';
-import ImageCropPicker from 'react-native-image-crop-picker';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 type Props = StackScreenProps<MapStackParamList, 'AddLocation'>;
@@ -30,6 +33,7 @@ type FormType = {
 
 function AddLocationScreen({ route }: Props) {
   usePermission('PHOTO');
+  const navigation = useNavigation();
   const { location } = route.params;
   const address = useGetAddress(location);
   const { form, touched, errors, onChange, getInputFieldProps } = useForm<FormType>({
@@ -43,23 +47,26 @@ function AddLocationScreen({ route }: Props) {
     validate: validateAddLocation,
   });
   const inset = useSafeAreaInsets();
-
+  const { handleChangeImage, imageUriList, deleteImageUri } = useImagePicker();
+  const { mutate: createLocationMutate } = useMutateLocation();
   const [openDatePicker, setOpenDatePicker] = useState(false);
 
   const handleSubmit = () => {
-    console.log('form', form);
+    createLocationMutate(
+      {
+        ...location,
+        ...form,
+        imageUris: imageUriList,
+        address,
+      },
+      {
+        onSuccess: () => {
+          navigation.goBack();
+        },
+      },
+    );
   };
 
-  const handleChangeImage = () => {
-    ImageCropPicker.openPicker({
-      mediaType: 'photo',
-      multiple: true,
-      includeBase64: true,
-      maxFiles: 5,
-    }).then(images => {
-      console.log('images >> ', images);
-    });
-  };
   return (
     <>
       <ScrollView contentContainerStyle={[styles.container, { paddingBottom: inset.bottom + 100 }]}>
@@ -103,7 +110,10 @@ function AddLocationScreen({ route }: Props) {
           }}
           onCancel={() => setOpenDatePicker(false)}
         />
-        <ImageInput onChange={handleChangeImage} />
+        <View style={{ flexDirection: 'row' }}>
+          <ImageInput onChange={handleChangeImage} />
+          <PreviewImageList imageUriList={imageUriList} onDelete={deleteImageUri} />
+        </View>
       </ScrollView>
       <FixedBottomCTA label="저장" onPress={handleSubmit} />
     </>

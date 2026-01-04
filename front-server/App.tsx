@@ -28,7 +28,7 @@ const toastConfig = {
   error: (props: BaseToastProps) => (
     <ErrorToast
       {...props}
-      style={{ borderLeftColor: colors.PINK_500 }}
+      style={{ borderLeftColor: colors.RED_500 }}
       text1Style={{ fontSize: 14 }}
       text2Style={{ fontSize: 12 }}
     />

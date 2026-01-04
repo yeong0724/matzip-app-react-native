@@ -1,8 +1,11 @@
 import CustomMarker from '@/components/CustomMarker';
 import DrawerButton from '@/components/DrawerButton';
 import MapIconButton from '@/components/MapIconButton';
+import MarkerModal from '@/components/MarkerModal';
 import { colors } from '@/constants/colors';
 import { INITIAL_DELTA } from '@/constants/numbers';
+import useMarkers from '@/hooks/queries/useMarkers';
+import useModal from '@/hooks/useModal';
 import useMoveMapView from '@/hooks/useMoveMapView';
 import usePermission from '@/hooks/usePermission';
 import useUserLocation from '@/hooks/useUserLocation';
@@ -23,8 +26,12 @@ function MapHomeScreen() {
   const { userLocation, isUserLocationError } = useUserLocation();
   const { mapRef, moveMapView, handleChangeDelta } = useMoveMapView();
   usePermission('LOCATION');
-
+  const { isVisible, showModal, hideModal } = useModal();
   const [selectLocation, setSelectLocation] = useState<LatLng | null>(null);
+  const [markerId, setMarkerId] = useState<number | null>(null);
+
+  const { useGetMarkers } = useMarkers();
+  const { data: markers = [] } = useGetMarkers();
 
   const handlePressUserLocation = () => {
     if (isUserLocationError) {
@@ -39,38 +46,10 @@ function MapHomeScreen() {
     moveMapView(userLocation);
   };
 
-  const coordinates = [
-    {
-      id: 1,
-      coordinate: {
-        latitude: 37.558713,
-        longitude: 127.067344,
-      },
-      color: colors.PINK_400,
-      score: 3,
-    },
-    {
-      id: 2,
-      coordinate: {
-        latitude: 37.559413,
-        longitude: 127.065544,
-      },
-      color: colors.PINK_400,
-      score: 5,
-    },
-    {
-      id: 3,
-      coordinate: {
-        latitude: 37.558713,
-        longitude: 127.062444,
-      },
-      color: colors.BLUE_400,
-      score: 1,
-    },
-  ];
-
-  const handlePressMarker = (coordinate: LatLng) => {
+  const handlePressMarker = (id: number, coordinate: LatLng) => {
+    setMarkerId(id);
     moveMapView(coordinate);
+    showModal();
   };
 
   const handlePressAddLocation = () => {
@@ -79,6 +58,7 @@ function MapHomeScreen() {
       return;
     }
     navigation.navigate('AddLocation', { location: selectLocation });
+    setSelectLocation(null);
   };
 
   return (
@@ -92,13 +72,13 @@ function MapHomeScreen() {
         provider={PROVIDER_GOOGLE}
         onLongPress={({ nativeEvent }) => setSelectLocation(nativeEvent.coordinate)}
         onRegionChangeComplete={handleChangeDelta}>
-        {coordinates.map(({ id, coordinate, color, score }) => (
+        {markers.map(({ id, latitude, longitude, color, score }) => (
           <CustomMarker
             key={id}
-            coordinate={coordinate}
+            coordinate={{ latitude, longitude }}
             color={color}
             score={score}
-            onPress={() => handlePressMarker(coordinate)}
+            onPress={() => handlePressMarker(id, { latitude, longitude })}
           />
         ))}
         {selectLocation && (
@@ -113,6 +93,7 @@ function MapHomeScreen() {
         <MapIconButton name="plus" onPress={handlePressAddLocation} />
         <MapIconButton name="location-crosshairs" onPress={handlePressUserLocation} />
       </View>
+      <MarkerModal markerId={markerId ?? 0} isVisible={isVisible} onClose={hideModal} />
     </>
   );
 }

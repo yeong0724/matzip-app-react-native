@@ -11,7 +11,7 @@ interface Marker {
   score: number;
 }
 
-interface Post extends Marker {
+interface Location extends Marker {
   title: string;
   address: string;
   date: Date | string;
@@ -28,4 +28,4 @@ interface Profile {
   loginType: 'email' | 'kakao' | 'apple';
 }
 
-export type { ImageUri, Marker, Post, Profile };
+export type { ImageUri, Marker, Location, Profile };
